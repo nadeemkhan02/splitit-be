@@ -6,7 +6,7 @@ const { Trip } = require('../models/trip')
 const auth = require('../middleware/auth')
 const router = express.Router()
 
-//debug fawn for transactions
+//debug fawn for transactions logic
 // const mongoose = require("mongoose");
 // const Fawn = require("fawn");
 
