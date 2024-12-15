@@ -11,34 +11,36 @@ router.get('/:id?', auth, async (req, res) => {
       .populate('tripCreator', 'name email')
       .populate('tripParticipants', 'name email')
       .populate({ path: 'expenses', select: 'amount title paidBy sharedAmong' })
-
     if (!trip) {
       return res.status(400).send('Invalid user ID.')
     }
-
     return res.send(trip)
   } else {
-    const trips = await Trip.find()
-      .populate('tripCreator', 'name -_id')
-      .populate('tripParticipants', 'name -_id')
+    const userId = req.query.userId
+    const isCompleted = req.query.isCompleted
+    const trips = await Trip.find(
+      userId ? { tripParticipants: { $in: [userId] }, isCompleted } : {}
+    )
+      .populate('tripCreator', 'name _id')
+      .populate('tripParticipants', 'name _id')
       .populate({
         path: 'expenses',
         select: 'amount title paidBy sharedAmong',
         populate: [
           {
             path: 'sharedAmong',
-            select: 'name -_id',
+            select: 'name _id',
           },
           {
             path: 'paidBy',
-            select: 'name -_id',
+            select: 'name _id',
           },
         ],
       })
 
-    if (trips.length === 0) {
-      return res.status(404).send('No trips found.')
-    }
+    // if (trips.length === 0) {
+    //   return res.status(200).send('No trips found.')
+    // }
     return res.send(trips)
   }
 })
@@ -76,6 +78,21 @@ router.post('/addTrip', auth, async (req, res) => {
     ])
   )
   await trip.save()
+  res.send(trip)
+})
+
+router.put('/completeTrip/:id', auth, async (req, res) => {
+  const trip = await Trip.findByIdAndUpdate(
+    req.params.id,
+    { $set: { isCompleted: true } }, // Only set isCompleted to true
+    {
+      new: true, // Return the updated document
+      runValidators: true, // Ensure validation rules are applied
+    }
+  )
+  if (!trip) {
+    return res.status(400).send('Invalid trip ID.')
+  }
   res.send(trip)
 })
 

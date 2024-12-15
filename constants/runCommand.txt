@@ -1,0 +1,2 @@
+mongod --dbpath ~/data/db
+splitit_jwtSecretKey="mySechrateKey" PORT=6000  nodemon index.js

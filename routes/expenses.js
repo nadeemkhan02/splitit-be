@@ -68,9 +68,9 @@ router.post('/addExpense', async (req, res) => {
   await expense.save()
   await trip.save()
 
-  expense.paidBy = paidBy
-  expense.sharedAmong = sharedAmong
-  expense.trip = trip?._id
+  // expense.paidBy = paidBy
+  // expense.sharedAmong = sharedAmong
+  // expense.trip = trip?._id
 
   res.send(expense)
 })
