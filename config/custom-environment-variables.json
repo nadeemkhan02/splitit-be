@@ -1,4 +1,4 @@
 {
   "name": "splitit-be",
-  "jwtSecretKey": "splitit_jwtSecretKey"
+  "JWT_SECRET_KEY": "JWT_SECRET_KEY"
 }
