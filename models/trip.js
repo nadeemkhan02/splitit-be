@@ -54,15 +54,15 @@ const Trip = mongoose.model(
 )
 
 const validateTrip = (trip) => {
-  const startofToday = new Date()
-  startofToday.setHours(0, 0, 0, 0)
+  const startOfToday = new Date()
+  startOfToday.setHours(0, 0, 0, 0)
 
   const schema = joi.object({
     name: joi.string().min(3).max(50).required(),
     description: joi.string().optional().max(500).min(0),
     tripCreator: joi.objectId().required(),
     tripParticipants: joi.array().items(joi.objectId()).required().min(2),
-    tripDate: joi.date().required().greater(startofToday).messages({
+    tripDate: joi.date().required().greater(startOfToday).messages({
       'date.greater': 'Trip date cannot be a past date',
     }),
     tripStatus: joi
